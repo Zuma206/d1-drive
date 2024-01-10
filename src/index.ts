@@ -44,10 +44,10 @@ export default {
     const database = env[command.data.database];
     const secret = env[command.data.database + ":SECRET"];
 
-    if (secret !== command.data.secret) return err("Invalid secret", 401);
     if (typeof database !== "object" || !("prepare" in database)) {
       return err("Database not found", 404);
     }
+    if (secret !== command.data.secret) return err("Invalid secret", 401);
 
     const statement = database
       .prepare(command.data.query)
