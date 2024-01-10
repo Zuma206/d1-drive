@@ -25,7 +25,9 @@ export default {
     if (request.method !== "POST" && request.method !== "GET") {
       return err("Method must be POST", 405);
     } else if (request.method == "GET") {
-      return new Response(`"Hello, World!" - D1 Drive`);
+      return new Response(
+        `"Hello, World!" - D1 Drive\n(POST to access the API)`
+      );
     }
 
     const body = await request.json().catch(() => null);
