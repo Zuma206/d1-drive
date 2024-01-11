@@ -49,19 +49,28 @@ export default {
     }
     if (secret !== command.data.secret) return err("Invalid secret", 401);
 
-    const statement = database
-      .prepare(command.data.query)
-      .bind(command.data.params);
+    let statement: D1PreparedStatement;
+    try {
+      statement = database
+        .prepare(command.data.query)
+        .bind(command.data.params);
+    } catch (_) {
+      return err("Failed preparing statement", 500);
+    }
 
-    switch (command.data.method) {
-      case "all":
-        return res(await statement.all());
-      case "first":
-        return res(await statement.first());
-      case "raw":
-        return res(await statement.raw());
-      default:
-        return res(await statement.run());
+    try {
+      switch (command.data.method) {
+        case "all":
+          return res(await statement.all());
+        case "first":
+          return res(await statement.first());
+        case "raw":
+          return res(await statement.raw());
+        default:
+          return res(await statement.run());
+      }
+    } catch (_) {
+      return err("Failed executing query", 500);
     }
   },
 };
