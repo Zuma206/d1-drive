@@ -54,7 +54,8 @@ export default {
       statement = database
         .prepare(command.data.query)
         .bind(...(command.data.params ?? []));
-    } catch (_) {
+    } catch (error) {
+      console.error(error);
       return err("Failed preparing statement", 500);
     }
 
@@ -69,7 +70,8 @@ export default {
         default:
           return res(await statement.run());
       }
-    } catch (_) {
+    } catch (error) {
+      console.log(error);
       return err("Failed executing query", 500);
     }
   },
