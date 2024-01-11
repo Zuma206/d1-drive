@@ -53,7 +53,7 @@ export default {
     try {
       statement = database
         .prepare(command.data.query)
-        .bind(command.data.params);
+        .bind(...(command.data.params ?? []));
     } catch (_) {
       return err("Failed preparing statement", 500);
     }
